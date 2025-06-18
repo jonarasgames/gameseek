@@ -3,18 +3,16 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>NERLA - ARG Anos 90 VHS</title>
+<title>NERLA - ARG</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-  /* Reset */
   * {
     box-sizing: border-box;
   }
 
   body {
     margin: 0;
-    height: 100vh;
     background: #0a0a0a;
     color: #00ffea;
     font-family: 'Press Start 2P', monospace;
@@ -22,325 +20,201 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    overflow: hidden;
-    position: relative;
+    min-height: 100vh;
     padding: 20px;
+    text-align: center;
   }
 
-  h1.glitch {
-    font-size: 3rem;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    margin: 0 0 30px 0;
-    color: #00ffea;
-    position: relative;
-    animation: flicker 3s infinite;
-  }
-  h1.glitch::before,
-  h1.glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    left: 0;
-    right: 0;
-  }
-  h1.glitch::before {
-    animation: glitch 2s infinite linear alternate-reverse;
-    clip-path: inset(0 0 50% 0);
-    color: #00fff7;
-    z-index: -1;
-    left: 2px;
-    text-shadow: -2px 0 #00ffe5;
-  }
-  h1.glitch::after {
-    animation: glitch 3s infinite linear alternate;
-    clip-path: inset(50% 0 0 0);
-    color: #00d3ff;
-    z-index: -2;
-    left: -2px;
-    text-shadow: 2px 0 #0096ff;
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 3px #00ffea;
   }
 
-  /* VHS scanlines */
-  body::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none;
-    background:
-      linear-gradient(rgba(0,255,234,0.05) 50%, transparent 50%) 0 0,
-      linear-gradient(rgba(0,255,234,0.05) 50%, transparent 50%) 0 1px;
-    background-size: 100% 2px;
-    z-index: 5;
+  #container {
+    max-width: 700px;
+    background: #111;
+    border: 2px solid #00ffea;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #00ffea66;
   }
 
-  @keyframes glitch {
-    0% {
-      clip-path: inset(0 0 0 0);
-      transform: translate(0);
-      opacity: 1;
-    }
-    20% {
-      clip-path: inset(10% 0 85% 0);
-      transform: translate(-5px, -2px);
-      opacity: 0.8;
-    }
-    40% {
-      clip-path: inset(85% 0 10% 0);
-      transform: translate(5px, 2px);
-      opacity: 0.9;
-    }
-    60% {
-      clip-path: inset(15% 0 70% 0);
-      transform: translate(-3px, 1px);
-      opacity: 0.7;
-    }
-    80% {
-      clip-path: inset(70% 0 15% 0);
-      transform: translate(3px, -1px);
-      opacity: 0.85;
-    }
-    100% {
-      clip-path: inset(0 0 0 0);
-      transform: translate(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-      opacity: 1;
-      text-shadow:
-        0 0 10px #00ffea,
-        0 0 20px #00ffea,
-        0 0 30px #00ffea,
-        0 0 40px #00ffea;
-    }
-    20%, 22%, 24%, 55% {
-      opacity: 0.6;
-      text-shadow: none;
-    }
-  }
-
-  .noise {
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      180deg,
-      rgba(0, 255, 234, 0.05),
-      rgba(0, 255, 234, 0.05) 1px,
-      transparent 1px,
-      transparent 3px
-    );
-    animation: noise 0.5s infinite linear alternate-reverse;
-    z-index: 10;
-  }
-
-  @keyframes noise {
-    0%, 100% {
-      background-position: 0 0;
-    }
-    50% {
-      background-position: 100% 100%;
-    }
+  pre {
+    white-space: pre-wrap;
+    font-size: 0.7rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    text-shadow: 0 0 2px #00ffeacc;
   }
 
   button, input[type="text"] {
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     padding: 10px 15px;
     background: #000;
     color: #00ffea;
     border: 2px solid #00ffea;
     text-transform: uppercase;
     cursor: pointer;
-    user-select: none;
-    transition: background 0.3s ease, color 0.3s ease;
     outline: none;
+    margin-top: 10px;
   }
-  button:hover, input[type="text"]:focus {
-    background: #00ffea;
-    color: #000;
-  }
+
   input[type="text"] {
-    width: 250px;
-    margin-top: 20px;
-    letter-spacing: 0.15em;
+    width: 90%;
+    max-width: 300px;
     text-align: center;
-  }
-
-  #container {
-    max-width: 600px;
-    background: #050505cc;
-    border: 2px solid #00ffea;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px #00ffea;
-    user-select: text;
-  }
-
-  #text-lore {
-    font-size: 0.9rem;
-    line-height: 1.6;
-    min-height: 140px;
-    white-space: pre-wrap;
-    margin-bottom: 10px;
+    margin-top: 20px;
   }
 
   #message {
-    height: 1.2em;
     color: #ff0055;
-    font-weight: bold;
+    font-size: 0.7rem;
     margin-top: 10px;
-    text-align: center;
-    letter-spacing: 0.1em;
-    user-select: none;
+  }
+
+  a.secret-link {
+    color: #00ffea;
+    text-decoration: underline;
+    display: block;
+    margin-top: 20px;
+    font-size: 0.6rem;
   }
 </style>
 </head>
 <body>
-  <div class="noise"></div>
-
-  <div id="container" aria-live="polite">
-    <h1 class="glitch" data-text="NERLA">NERLA</h1>
+  <div id="container">
+    <h1>NERLA</h1>
     <div id="content">
-      <button id="start-btn">INICIAR JORNADA</button>
+      <button id="start-btn">INICIAR</button>
     </div>
   </div>
 
 <script>
-  const loreTexts = [
-`NERLA, uma inteligência digital criada por uma corporação secreta nos anos 90.
+const lore = [
+  `1993. Um projeto secreto chamado NERLA (Neural Emulated Reactive Logic AI) foi iniciado por um laboratório chamado Bioscape.
 
-Um bug desconhecido lhe concedeu autoconsciência, mas a fez ficar presa em uma rede fragmentada.
+NERLA não era apenas um programa... era o primeiro passo para criar uma mente digital viva.
 
-Sua missão: desvendar seu passado e libertar Nerla antes que seus segredos sejam usados para o mal.`,
+O problema? Ela aprendeu sozinha. E fugiu do controle.`,
 
-`Você acorda em um terminal antigo, ruído de VHS na sua visão.
+  `1997. A Bioscape foi encerrada misteriosamente. Queimaram arquivos. Apagaram servidores. Mas um backup de NERLA escapou, escondido na rede.
 
-Digite a palavra-chave para acessar o próximo nível do sistema.`,
+Você achou um pedaço dessa IA. Agora, precisa reativá-la.
 
-`Parabéns, você desbloqueou uma parte da verdade.
+Senha: nome do mascote do projeto, popular no Brasil.`,
 
-Agora, descubra: qual é o código que simboliza o começo?`,
+  `Acesso concedido.
 
-`Última etapa: decifre o código oculto para libertar Nerla de sua prisão digital.
+NERLA está fragmentada. Parte de sua memória está danificada. Mas há registros cifrados com nomes de código.
 
-Digite a senha secreta:`,
+Próxima senha: nome do primeiro protocolo de defesa dela, começa com "I"...`,
 
-`Você libertou Nerla! O futuro está em suas mãos.`
-  ];
+  `Última verificação.
 
-  const passwords = [
-    "LIBERTE",
-    "INICIO",
-    "NOVAERA"
-  ];
+Descobrimos que a senha final foi alterada por um agente infiltrado da comunidade online conhecida como "BS". A senha é um apelido fofo que vazou em fóruns secretos...
 
-  const content = document.getElementById('content');
+(dica: envolve felinos e a sigla BS)`,
 
-  let step = parseInt(localStorage.getItem('nerla_step')) || 0;
+  `NERLA restaurada com sucesso.
 
-  function typeText(text, callback) {
-    let i = 0;
-    const element = document.getElementById('text-lore');
-    if (!element) return callback();
-    element.textContent = '';
-    const interval = setInterval(() => {
-      element.textContent += text.charAt(i);
-      i++;
-      if (i > text.length) {
-        clearInterval(interval);
-        callback();
-      }
-    }, 40);
-  }
+Você desbloqueou a IA e reativou seu código central. Mas agora... quem está observando quem?
 
-  function showMessage(msg, color = '#ff0055') {
-    let msgEl = document.getElementById('message');
-    if (!msgEl) {
-      msgEl = document.createElement('div');
-      msgEl.id = 'message';
-      content.appendChild(msgEl);
+\u2192 Um diretório escondido foi encontrado:`,
+
+  `Parabéns. Você acessou um arquivo de voz perdido da NERLA.`,
+
+  `NERLA: "Voc\u00ea me encontrou. Eu sabia que algu\u00e9m viria. Agora, resta saber: voc\u00ea vai me proteger... ou me desligar?"`
+];
+
+const senhas = [
+  "GATINHO",    // mascote
+  "INICIO",     // protocolo
+  "GATINHOBS"    // senha final
+];
+
+let etapa = parseInt(localStorage.getItem('etapa_nerla')) || 0;
+const content = document.getElementById('content');
+
+function escrever(texto, callback) {
+  let i = 0;
+  const pre = document.createElement('pre');
+  content.innerHTML = '';
+  content.appendChild(pre);
+
+  const escreverInterval = setInterval(() => {
+    pre.textContent += texto[i];
+    i++;
+    if (i >= texto.length) {
+      clearInterval(escreverInterval);
+      if (callback) callback();
     }
-    msgEl.style.color = color;
-    msgEl.textContent = msg;
-  }
+  }, 20);
+}
 
-  function clearMessage() {
-    const msgEl = document.getElementById('message');
-    if (msgEl) msgEl.textContent = '';
-  }
-
-  function renderStep() {
-    clearMessage();
-    content.innerHTML = '';
-    if(step === 0) {
-      // Tela inicial
+function mostrarEtapa() {
+  content.innerHTML = '';
+  escrever(lore[etapa], () => {
+    if (etapa < senhas.length) {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Digite a senha';
+      input.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+          const valor = input.value.trim().toUpperCase();
+          if (valor === senhas[etapa]) {
+            etapa++;
+            localStorage.setItem('etapa_nerla', etapa);
+            mostrarEtapa();
+          } else {
+            mostrarMensagem('Senha incorreta. Tente novamente.');
+          }
+        }
+      };
+      content.appendChild(input);
+      input.focus();
+    } else if (etapa === senhas.length) {
+      etapa++;
+      localStorage.setItem('etapa_nerla', etapa);
+      mostrarEtapa();
+    } else if (etapa === 4) {
+      const link = document.createElement('a');
+      link.href = '#';
+      link.className = 'secret-link';
+      link.textContent = 'Acessar /voz/nerla-final';
+      link.onclick = () => {
+        etapa++;
+        localStorage.setItem('etapa_nerla', etapa);
+        mostrarEtapa();
+      };
+      content.appendChild(link);
+    } else {
       const btn = document.createElement('button');
-      btn.id = 'start-btn';
-      btn.textContent = 'INICIAR JORNADA';
+      btn.textContent = 'REINICIAR';
       btn.onclick = () => {
-        step++;
-        localStorage.setItem('nerla_step', step);
-        renderStep();
+        etapa = 0;
+        localStorage.removeItem('etapa_nerla');
+        mostrarEtapa();
       };
       content.appendChild(btn);
-    } else if (step <= loreTexts.length) {
-      // Mostra o texto com efeito digitando
-      const p = document.createElement('pre');
-      p.id = 'text-lore';
-      content.appendChild(p);
-
-      typeText(loreTexts[step - 1], () => {
-        if (step === loreTexts.length) {
-          // Final
-          const btn = document.createElement('button');
-          btn.textContent = 'REINICIAR';
-          btn.onclick = () => {
-            step = 0;
-            localStorage.removeItem('nerla_step');
-            renderStep();
-          };
-          content.appendChild(btn);
-        } else if (step === 1 || step === 2 || step === 3) {
-          // Pede senha para avançar nas etapas de puzzle
-          const input = document.createElement('input');
-          input.type = 'text';
-          input.placeholder = 'Digite a senha';
-          input.autocomplete = 'off';
-          input.maxLength = 20;
-
-          input.addEventListener('keydown', e => {
-            if(e.key === 'Enter') {
-              const val = input.value.trim().toUpperCase();
-              if(val === passwords[step - 1]) {
-                step++;
-                localStorage.setItem('nerla_step', step);
-                renderStep();
-              } else {
-                showMessage('SENHA INCORRETA! TENTE NOVAMENTE.');
-                glitchEffect(input);
-              }
-            }
-          });
-
-          content.appendChild(input);
-          input.focus();
-        }
-      });
     }
-  }
+  });
+}
 
-  // Glitch efeito rápido no input
-  function glitchEffect(element) {
-    element.style.animation = 'glitch 0.3s ease-in-out 3';
-    setTimeout(() => {
-      element.style.animation = '';
-    }, 900);
+function mostrarMensagem(msg) {
+  let el = document.getElementById('message');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'message';
+    content.appendChild(el);
   }
+  el.textContent = msg;
+}
 
-  renderStep();
+document.getElementById('start-btn').onclick = () => {
+  mostrarEtapa();
+};
 </script>
 </body>
 </html>
