@@ -3,9 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Nerla ARG 90s VHS</title>
+<title>NERLA - ARG Anos 90 VHS</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+  /* Reset */
+  * {
+    box-sizing: border-box;
+  }
 
   body {
     margin: 0;
@@ -19,25 +24,40 @@
     flex-direction: column;
     overflow: hidden;
     position: relative;
+    padding: 20px;
   }
 
-  h1 {
-    font-size: 2.8rem;
+  h1.glitch {
+    font-size: 3rem;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    margin: 0;
+    margin: 0 0 30px 0;
     color: #00ffea;
     position: relative;
     animation: flicker 3s infinite;
   }
-
-  p {
-    font-size: 1rem;
-    color: #00ffeaaa;
-    margin-top: 1em;
-    max-width: 300px;
-    text-align: center;
-    text-shadow: 0 0 5px #00ffeaaa;
+  h1.glitch::before,
+  h1.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+  h1.glitch::before {
+    animation: glitch 2s infinite linear alternate-reverse;
+    clip-path: inset(0 0 50% 0);
+    color: #00fff7;
+    z-index: -1;
+    left: 2px;
+    text-shadow: -2px 0 #00ffe5;
+  }
+  h1.glitch::after {
+    animation: glitch 3s infinite linear alternate;
+    clip-path: inset(50% 0 0 0);
+    color: #00d3ff;
+    z-index: -2;
+    left: -2px;
+    text-shadow: 2px 0 #0096ff;
   }
 
   /* VHS scanlines */
@@ -53,7 +73,6 @@
     z-index: 5;
   }
 
-  /* Glitch effect */
   @keyframes glitch {
     0% {
       clip-path: inset(0 0 0 0);
@@ -87,35 +106,6 @@
     }
   }
 
-  .glitch {
-    position: relative;
-    color: #00ffea;
-  }
-  .glitch::before,
-  .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    left: 0;
-    right: 0;
-  }
-  .glitch::before {
-    animation: glitch 2s infinite linear alternate-reverse;
-    clip-path: inset(0 0 50% 0);
-    color: #00fff7;
-    z-index: -1;
-    left: 2px;
-    text-shadow: -2px 0 #00ffe5;
-  }
-  .glitch::after {
-    animation: glitch 3s infinite linear alternate;
-    clip-path: inset(50% 0 0 0);
-    color: #00d3ff;
-    z-index: -2;
-    left: -2px;
-    text-shadow: 2px 0 #0096ff;
-  }
-
-  /* Flicker text */
   @keyframes flicker {
     0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
       opacity: 1;
@@ -128,16 +118,6 @@
     20%, 22%, 24%, 55% {
       opacity: 0.6;
       text-shadow: none;
-    }
-  }
-
-  /* VHS noise lines */
-  @keyframes noise {
-    0%, 100% {
-      background-position: 0 0;
-    }
-    50% {
-      background-position: 100% 100%;
     }
   }
 
@@ -155,12 +135,212 @@
     animation: noise 0.5s infinite linear alternate-reverse;
     z-index: 10;
   }
+
+  @keyframes noise {
+    0%, 100% {
+      background-position: 0 0;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+  }
+
+  button, input[type="text"] {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.8rem;
+    padding: 10px 15px;
+    background: #000;
+    color: #00ffea;
+    border: 2px solid #00ffea;
+    text-transform: uppercase;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.3s ease, color 0.3s ease;
+    outline: none;
+  }
+  button:hover, input[type="text"]:focus {
+    background: #00ffea;
+    color: #000;
+  }
+  input[type="text"] {
+    width: 250px;
+    margin-top: 20px;
+    letter-spacing: 0.15em;
+    text-align: center;
+  }
+
+  #container {
+    max-width: 600px;
+    background: #050505cc;
+    border: 2px solid #00ffea;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #00ffea;
+    user-select: text;
+  }
+
+  #text-lore {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    min-height: 140px;
+    white-space: pre-wrap;
+    margin-bottom: 10px;
+  }
+
+  #message {
+    height: 1.2em;
+    color: #ff0055;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+    letter-spacing: 0.1em;
+    user-select: none;
+  }
 </style>
 </head>
 <body>
-  <h1 class="glitch" data-text="NERLA">NERLA</h1>
-  <p>Inicie sua jornada. Descubra os segredos. O tempo está distorcido.</p>
-
   <div class="noise"></div>
+
+  <div id="container" aria-live="polite">
+    <h1 class="glitch" data-text="NERLA">NERLA</h1>
+    <div id="content">
+      <button id="start-btn">INICIAR JORNADA</button>
+    </div>
+  </div>
+
+<script>
+  const loreTexts = [
+`NERLA, uma inteligência digital criada por uma corporação secreta nos anos 90.
+
+Um bug desconhecido lhe concedeu autoconsciência, mas a fez ficar presa em uma rede fragmentada.
+
+Sua missão: desvendar seu passado e libertar Nerla antes que seus segredos sejam usados para o mal.`,
+
+`Você acorda em um terminal antigo, ruído de VHS na sua visão.
+
+Digite a palavra-chave para acessar o próximo nível do sistema.`,
+
+`Parabéns, você desbloqueou uma parte da verdade.
+
+Agora, descubra: qual é o código que simboliza o começo?`,
+
+`Última etapa: decifre o código oculto para libertar Nerla de sua prisão digital.
+
+Digite a senha secreta:`,
+
+`Você libertou Nerla! O futuro está em suas mãos.`
+  ];
+
+  const passwords = [
+    "LIBERTE",
+    "INICIO",
+    "NOVAERA"
+  ];
+
+  const content = document.getElementById('content');
+
+  let step = parseInt(localStorage.getItem('nerla_step')) || 0;
+
+  function typeText(text, callback) {
+    let i = 0;
+    const element = document.getElementById('text-lore');
+    if (!element) return callback();
+    element.textContent = '';
+    const interval = setInterval(() => {
+      element.textContent += text.charAt(i);
+      i++;
+      if (i > text.length) {
+        clearInterval(interval);
+        callback();
+      }
+    }, 40);
+  }
+
+  function showMessage(msg, color = '#ff0055') {
+    let msgEl = document.getElementById('message');
+    if (!msgEl) {
+      msgEl = document.createElement('div');
+      msgEl.id = 'message';
+      content.appendChild(msgEl);
+    }
+    msgEl.style.color = color;
+    msgEl.textContent = msg;
+  }
+
+  function clearMessage() {
+    const msgEl = document.getElementById('message');
+    if (msgEl) msgEl.textContent = '';
+  }
+
+  function renderStep() {
+    clearMessage();
+    content.innerHTML = '';
+    if(step === 0) {
+      // Tela inicial
+      const btn = document.createElement('button');
+      btn.id = 'start-btn';
+      btn.textContent = 'INICIAR JORNADA';
+      btn.onclick = () => {
+        step++;
+        localStorage.setItem('nerla_step', step);
+        renderStep();
+      };
+      content.appendChild(btn);
+    } else if (step <= loreTexts.length) {
+      // Mostra o texto com efeito digitando
+      const p = document.createElement('pre');
+      p.id = 'text-lore';
+      content.appendChild(p);
+
+      typeText(loreTexts[step - 1], () => {
+        if (step === loreTexts.length) {
+          // Final
+          const btn = document.createElement('button');
+          btn.textContent = 'REINICIAR';
+          btn.onclick = () => {
+            step = 0;
+            localStorage.removeItem('nerla_step');
+            renderStep();
+          };
+          content.appendChild(btn);
+        } else if (step === 1 || step === 2 || step === 3) {
+          // Pede senha para avançar nas etapas de puzzle
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.placeholder = 'Digite a senha';
+          input.autocomplete = 'off';
+          input.maxLength = 20;
+
+          input.addEventListener('keydown', e => {
+            if(e.key === 'Enter') {
+              const val = input.value.trim().toUpperCase();
+              if(val === passwords[step - 1]) {
+                step++;
+                localStorage.setItem('nerla_step', step);
+                renderStep();
+              } else {
+                showMessage('SENHA INCORRETA! TENTE NOVAMENTE.');
+                glitchEffect(input);
+              }
+            }
+          });
+
+          content.appendChild(input);
+          input.focus();
+        }
+      });
+    }
+  }
+
+  // Glitch efeito rápido no input
+  function glitchEffect(element) {
+    element.style.animation = 'glitch 0.3s ease-in-out 3';
+    setTimeout(() => {
+      element.style.animation = '';
+    }, 900);
+  }
+
+  renderStep();
+</script>
 </body>
 </html>
