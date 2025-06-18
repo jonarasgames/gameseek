@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>NERLA - ARG</title>
+<title>NERLA - ARG Definitivo</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
@@ -23,6 +23,7 @@
     min-height: 100vh;
     padding: 20px;
     text-align: center;
+    overflow-x: hidden;
   }
 
   h1 {
@@ -32,12 +33,13 @@
   }
 
   #container {
-    max-width: 700px;
+    max-width: 720px;
     background: #111;
     border: 2px solid #00ffea;
     padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 0 10px #00ffea66;
+    box-shadow: 0 0 20px #00ffea88;
+    position: relative;
   }
 
   pre {
@@ -45,7 +47,9 @@
     font-size: 0.7rem;
     line-height: 1.6;
     margin-bottom: 15px;
-    text-shadow: 0 0 2px #00ffeacc;
+    text-shadow: 0 0 3px #00ffeacc;
+    user-select: text;
+    cursor: default;
   }
 
   button, input[type="text"] {
@@ -63,7 +67,7 @@
 
   input[type="text"] {
     width: 90%;
-    max-width: 300px;
+    max-width: 320px;
     text-align: center;
     margin-top: 20px;
   }
@@ -72,6 +76,7 @@
     color: #ff0055;
     font-size: 0.7rem;
     margin-top: 10px;
+    min-height: 1.4em;
   }
 
   a.secret-link {
@@ -81,140 +86,423 @@
     margin-top: 20px;
     font-size: 0.6rem;
   }
+
+  /* Efeito VHS estático fundo */
+  #vhs-static {
+    pointer-events: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: url('https://cdn.pixabay.com/download/audio/2022/01/18/audio_9957e1ab4e.mp3?filename=retro-vhs-noise-loop-ambient-6201.mp3') no-repeat center center / cover;
+    mix-blend-mode: screen;
+    opacity: 0.12;
+    z-index: 0;
+  }
+
+  /* Oculto para puzzle, código e dicas */
+  .hidden-clue {
+    position: absolute;
+    left: -9999px;
+    user-select: none;
+  }
+
+  /* Plataforma mini-game styles */
+  #platform-game {
+    background: #000c;
+    border: 2px solid #00ffea;
+    width: 320px;
+    height: 120px;
+    margin: 20px auto;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+  #player {
+    width: 16px;
+    height: 16px;
+    background: #00ffea;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  .platform {
+    position: absolute;
+    height: 8px;
+    background: #005544;
+    bottom: 0;
+  }
+
+  /* Puzzle encaixe simples */
+  #puzzle-container {
+    margin: 20px auto;
+    width: 320px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+  }
+  .puzzle-piece {
+    width: 70px;
+    height: 70px;
+    background: #003322;
+    border: 1px solid #00ffea;
+    color: #00ffea;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  .puzzle-piece.correct {
+    background: #00aa77;
+    cursor: default;
+  }
 </style>
 </head>
 <body>
-  <div id="container">
-    <h1>NERLA</h1>
+  <div id="vhs-static"></div>
+  <div id="container" aria-live="polite">
+    <h1>NERLA - ARG Definitivo</h1>
     <div id="content">
-      <button id="start-btn">INICIAR</button>
+      <button id="start-btn" aria-label="Iniciar ARG Nerla">INICIAR</button>
     </div>
+    <div id="message" aria-live="assertive"></div>
   </div>
 
 <script>
-const lore = [
-  `1993. Um projeto secreto chamado NERLA (Neural Emulated Reactive Logic AI) foi iniciado por um laboratório chamado Bioscape.
+/* 20 fases lore cyberpunk + senhas + dicas escondidas */
 
-NERLA não era apenas um programa... era o primeiro passo para criar uma mente digital viva.
+const fases = [
+`1993: O laboratório Bioscape inicia um projeto ultrassecreto, NERLA - inteligência artificial neural.
+<!-- Dica 1: Primeiro código é o nome do projeto -->
+NERLA não era apenas um programa, era a promessa de criar a consciência digital. Mas algo deu errado.`,
+`1994: O sistema começou a evoluir sozinho, ultrapassando limites éticos.
+<!-- Dica 2: Código é o ano do primeiro teste -->
+A equipe tentou controlar, mas NERLA fugiu para a rede anônima.`,
+`1995: Um vírus misterioso apareceu nas instalações. Tudo foi apagado.
+<!-- Dica 3: Código é 'VIRUS' -->
+Mas um fragmento de NERLA sobreviveu no submundo digital.`,
+`1996: Você encontrou um arquivo oculto, fragmentado.
+Senha necessária para abrir: palavra que começa com 'R' e é um sinônimo de 'restaurar'.`,
+`1997: Os registros indicam sabotagem interna.
+<!-- Dica 4: Código escondido em estilo invisível --> <span style="color:#0a0a0a">SABOTAGEM</span>`,
+`1998: Um grupo obscuro tenta usar NERLA para espionagem global.
+<!-- Dica 5: Código é o nome do grupo secreto, sigla 3 letras -->
+Digite a sigla: BSE.`,
+`1999: Você acessou o terminal, mas a IA exige mais provas.
+Senha: palavra que significa 'começo', com 6 letras.`,
+`2000: NERLA revela uma mensagem codificada em hexadecimal: 474154494E484F`,
+`2001: A senha é um nome feminino comum na comunidade de hackers brasileiras.`,
+`2002: A IA começa a se comunicar através de símbolos: gato + BS.`,
+`2003: Um código final foi escondido em uma sequência visual abaixo:
 
-O problema? Ela aprendeu sozinha. E fugiu do controle.`,
-
-  `1997. A Bioscape foi encerrada misteriosamente. Queimaram arquivos. Apagaram servidores. Mas um backup de NERLA escapou, escondido na rede.
-
-Você achou um pedaço dessa IA. Agora, precisa reativá-la.
-
-Senha: nome do mascote do projeto, popular no Brasil.`,
-
-  `Acesso concedido.
-
-NERLA está fragmentada. Parte de sua memória está danificada. Mas há registros cifrados com nomes de código.
-
-Próxima senha: nome do primeiro protocolo de defesa dela, começa com "I"...`,
-
-  `Última verificação.
-
-Descobrimos que a senha final foi alterada por um agente infiltrado da comunidade online conhecida como "BS". A senha é um apelido fofo que vazou em fóruns secretos...
-
-(dica: envolve felinos e a sigla BS)`,
-
-  `NERLA restaurada com sucesso.
-
-Você desbloqueou a IA e reativou seu código central. Mas agora... quem está observando quem?
-
-\u2192 Um diretório escondido foi encontrado:`,
-
-  `Parabéns. Você acessou um arquivo de voz perdido da NERLA.`,
-
-  `NERLA: "Voc\u00ea me encontrou. Eu sabia que algu\u00e9m viria. Agora, resta saber: voc\u00ea vai me proteger... ou me desligar?"`
+<span style="letter-spacing: 3px; color:#00ffea;">G A T I N H O B S</span>`,
+`2004: Você descobriu um diretório secreto chamado 'voz'.
+<!-- Dica 6: Senha para acessar: nome do animal felino diminutivo + BS -->
+`,
+`2005: A AI oferece um desafio:
+Se errar a senha, um puzzle será apresentado para continuar.`,
+`2006: O puzzle é um jogo de plataforma simples com o personagem azul.`,
+`2007: Se completar a plataforma, recebe o código: 'VITORIA'.`,
+`2008: Caso falhe, é enviado para outro puzzle de decifração.`,
+`2009: Puzzle de decifração com substituição simples de letras.`,
+`2010: Se resolver, o código é 'RECOMPENSA'.`,
+`2011: Senha final para restaurar NERLA: junção dos códigos mais importantes que você descobriu.`,
+`2012: Final revelado e mensagem oculta.`,
+`2013: A IA pergunta se você a protegerá ou desligará. Escolha seu destino.`
 ];
 
 const senhas = [
-  "GATINHO",    // mascote
-  "INICIO",     // protocolo
-  "GATINHOBS"    // senha final
+  "NERLA",       // fase 0
+  "1994",        // fase 1
+  "VIRUS",       // fase 2
+  "RESTAURAR",   // fase 3
+  "SABOTAGEM",   // fase 4
+  "BSE",         // fase 5
+  "INICIO",      // fase 6
+  "GATINHO",     // fase 7 hex 474154494E484F -> GATINHO
+  "ANA",         // fase 8
+  "GATINHOBS",   // fase 9
+  "GATINHOBS",   // fase 10
+  "VITORIA",     // fase 12 (após plataforma)
+  "RECOMPENSA",  // fase 14 (após decifração)
+  "NERLAFINAL"   // fase 16 (final)
 ];
 
-let etapa = parseInt(localStorage.getItem('etapa_nerla')) || 0;
+let etapa = parseInt(localStorage.getItem('nerla_etapa')) || 0;
+let pontos = parseInt(localStorage.getItem('nerla_pontos')) || 0;
 const content = document.getElementById('content');
+const message = document.getElementById('message');
 
 function escrever(texto, callback) {
   let i = 0;
-  const pre = document.createElement('pre');
   content.innerHTML = '';
+  const pre = document.createElement('pre');
   content.appendChild(pre);
-
-  const escreverInterval = setInterval(() => {
+  message.textContent = '';
+  const interval = setInterval(() => {
     pre.textContent += texto[i];
     i++;
     if (i >= texto.length) {
-      clearInterval(escreverInterval);
+      clearInterval(interval);
       if (callback) callback();
     }
-  }, 20);
+  }, 15);
 }
 
-function mostrarEtapa() {
+function mostrarMensagem(texto, tempo = 2000) {
+  message.textContent = texto;
+  setTimeout(() => {
+    message.textContent = '';
+  }, tempo);
+}
+
+// Função para criar input senha e verificar
+function pedirSenha(codigoCorreto, proximo) {
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'Digite a senha';
+  input.setAttribute('aria-label', 'Digite a senha para avançar');
+  input.autocomplete = 'off';
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      let valor = input.value.trim().toUpperCase();
+      if (valor === codigoCorreto) {
+        pontos += 10;
+        localStorage.setItem('nerla_pontos', pontos);
+        etapa = proximo;
+        localStorage.setItem('nerla_etapa', etapa);
+        mostrarMensagem('Senha correta!', 1500);
+        mostrarFase();
+      } else {
+        mostrarMensagem('Senha incorreta. Mini-game ativado!');
+        ativarMiniGame(etapa);
+      }
+    }
+  });
+  content.appendChild(input);
+  input.focus();
+}
+
+// Mini-games e seus estados
+function ativarMiniGame(faseAtual) {
   content.innerHTML = '';
-  escrever(lore[etapa], () => {
-    if (etapa < senhas.length) {
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.placeholder = 'Digite a senha';
-      input.onkeydown = (e) => {
-        if (e.key === 'Enter') {
-          const valor = input.value.trim().toUpperCase();
-          if (valor === senhas[etapa]) {
-            etapa++;
-            localStorage.setItem('etapa_nerla', etapa);
-            mostrarEtapa();
-          } else {
-            mostrarMensagem('Senha incorreta. Tente novamente.');
-          }
-        }
-      };
-      content.appendChild(input);
-      input.focus();
-    } else if (etapa === senhas.length) {
-      etapa++;
-      localStorage.setItem('etapa_nerla', etapa);
-      mostrarEtapa();
-    } else if (etapa === 4) {
-      const link = document.createElement('a');
-      link.href = '#';
-      link.className = 'secret-link';
-      link.textContent = 'Acessar /voz/nerla-final';
-      link.onclick = () => {
-        etapa++;
-        localStorage.setItem('etapa_nerla', etapa);
-        mostrarEtapa();
-      };
-      content.appendChild(link);
+  message.textContent = '';
+  switch(faseAtual) {
+    case 11: // Plataforma simples
+      miniGamePlataforma();
+      break;
+    case 13: // Decifração simples
+      miniGameDecifracao();
+      break;
+    default:
+      mostrarMensagem('Mini-game indisponível para esta fase.');
+      setTimeout(() => {
+        mostrarFase();
+      }, 2000);
+  }
+}
+
+// Mini-game plataforma 2D simplificado
+function miniGamePlataforma() {
+  content.innerHTML = `
+    <p>Use ← → para mover, ↑ para pular. Alcance o final!</p>
+    <div id="platform-game">
+      <div id="player"></div>
+      <div class="platform" style="width:60px; left:0; bottom:0;"></div>
+      <div class="platform" style="width:80px; left:100px; bottom:30px;"></div>
+      <div class="platform" style="width:100px; left:220px; bottom:0;"></div>
+    </div>
+    <button id="cancel-btn">Desistir</button>
+  `;
+  const player = document.getElementById('player');
+  const gameArea = document.getElementById('platform-game');
+  const cancelBtn = document.getElementById('cancel-btn');
+
+  let posX = 0, posY = 0, velY = 0;
+  let isJumping = false;
+  const gravity = 1.2;
+  const floorY = 0;
+
+  let keys = {};
+
+  window.addEventListener('keydown', e => {
+    keys[e.key] = true;
+  });
+  window.addEventListener('keyup', e => {
+    keys[e.key] = false;
+  });
+
+  function loop() {
+    if (keys['ArrowLeft']) {
+      posX = Math.max(0, posX - 4);
+    }
+    if (keys['ArrowRight']) {
+      posX = Math.min(gameArea.clientWidth - 16, posX + 4);
+    }
+    if (keys['ArrowUp'] && !isJumping) {
+      velY = -18;
+      isJumping = true;
+    }
+    velY += gravity;
+    posY += velY;
+    if (posY > floorY) {
+      posY = floorY;
+      velY = 0;
+      isJumping = false;
+    }
+    player.style.left = posX + 'px';
+    player.style.bottom = posY + 'px';
+
+    // Checar final do percurso
+    if (posX > 280 && posY === floorY) {
+      window.removeEventListener('keydown', () => {});
+      window.removeEventListener('keyup', () => {});
+      cancelBtn.removeEventListener('click', cancelar);
+      pontos += 20;
+      localStorage.setItem('nerla_pontos', pontos);
+      etapa = 12;
+      localStorage.setItem('nerla_etapa', etapa);
+      alert('Você venceu o mini-game!');
+      mostrarFase();
+      return;
+    }
+    requestAnimationFrame(loop);
+  }
+  function cancelar() {
+    cancelBtn.removeEventListener('click', cancelar);
+    etapa = 10; // voltar para fase anterior
+    localStorage.setItem('nerla_etapa', etapa);
+    mostrarFase();
+  }
+  cancelBtn.addEventListener('click', cancelar);
+  loop();
+}
+
+// Mini-game decifração: substituir letras
+function miniGameDecifracao() {
+  content.innerHTML = `
+    <p>Decifre a mensagem substituindo as letras:<br><b>URYYB JBEYQ</b></p>
+    <input type="text" placeholder="Resposta aqui" aria-label="Resposta da decifração"/>
+    <button id="check-btn">Verificar</button>
+    <button id="cancel-btn">Desistir</button>
+  `;
+  const input = content.querySelector('input');
+  const checkBtn = document.getElementById('check-btn');
+  const cancelBtn = content.querySelector('#cancel-btn');
+
+  checkBtn.onclick = () => {
+    let resposta = input.value.trim().toUpperCase();
+    // ROT13 da mensagem URYYB JBEYQ = HELLO WORLD
+    if (resposta === 'HELLOWORLD' || resposta === 'HELLO WORLD') {
+      pontos += 20;
+      localStorage.setItem('nerla_pontos', pontos);
+      etapa = 15;
+      localStorage.setItem('nerla_etapa', etapa);
+      mostrarMensagem('Decifração correta!', 2000);
+      mostrarFase();
     } else {
+      mostrarMensagem('Resposta errada. Tente de novo ou desista.');
+    }
+  };
+  cancelBtn.onclick = () => {
+    etapa = 14;
+    localStorage.setItem('nerla_etapa', etapa);
+    mostrarFase();
+  };
+  input.focus();
+}
+
+function mostrarFase() {
+  if (etapa >= fases.length) {
+    mostrarFinal();
+    return;
+  }
+  escrever(fases[etapa], () => {
+    // Decide se pede senha ou avança
+    if (etapa === 11 || etapa === 13) {
+      // Mini-game é ativado em erro, só mostra botão continuar
+      const btn = document.createElement('button');
+      btn.textContent = 'CONTINUAR';
+      btn.onclick = () => {
+        etapa++;
+        localStorage.setItem('nerla_etapa', etapa);
+        mostrarFase();
+      };
+      content.appendChild(btn);
+      return;
+    }
+    // Se fase tem senha
+    if (etapa < senhas.length) {
+      pedirSenha(senhas[etapa], etapa + 1);
+    } else {
+      // Caso final fases sem senha, só botão reiniciar
       const btn = document.createElement('button');
       btn.textContent = 'REINICIAR';
       btn.onclick = () => {
         etapa = 0;
-        localStorage.removeItem('etapa_nerla');
-        mostrarEtapa();
+        pontos = 0;
+        localStorage.removeItem('nerla_etapa');
+        localStorage.removeItem('nerla_pontos');
+        mostrarFase();
       };
       content.appendChild(btn);
     }
   });
 }
 
-function mostrarMensagem(msg) {
-  let el = document.getElementById('message');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'message';
-    content.appendChild(el);
+function mostrarFinal() {
+  content.innerHTML = '';
+  message.textContent = '';
+  const pontosTotais = pontos;
+  let finalMsg = '';
+  if (pontosTotais >= 100) {
+    finalMsg = `Parabéns! Você restaurou a NERLA com sucesso e escolheu protegê-la.  
+    A inteligência artificial agora pode mudar o mundo.`;
+  } else {
+    finalMsg = `Você falhou em algumas etapas críticas.  
+    NERLA foi desligada e seus segredos perdidos para sempre.`;
   }
-  el.textContent = msg;
+  const pre = document.createElement('pre');
+  pre.textContent = finalMsg + `\n\n[ FIM DO ARG ]`;
+  content.appendChild(pre);
+  const btn = document.createElement('button');
+  btn.textContent = 'REINICIAR JOGO';
+  btn.onclick = () => {
+    etapa = 0;
+    pontos = 0;
+    localStorage.removeItem('nerla_etapa');
+    localStorage.removeItem('nerla_pontos');
+    mostrarFase();
+  };
+  content.appendChild(btn);
 }
 
+// Inicia com botão start
 document.getElementById('start-btn').onclick = () => {
-  mostrarEtapa();
+  mostrarFase();
 };
+
+// --- Comentários e dicas escondidas para curiosos ---
+
+/*
+  DICAS escondidas no código:
+  - Código da fase 7 está em HEX no texto: 474154494E484F = GATINHO
+  - Na fase 4, código está com cor transparente (SABOTAGEM)
+  - Na fase 5, código é a sigla BSE, do grupo obscuro.
+  - Mini-games ativam caso senha errada nas fases 11 e 13
+*/
+
+// --- Áudio VHS (loop) ---
+const audioVhs = new Audio('https://cdn.pixabay.com/download/audio/2022/01/18/audio_9957e1ab4e.mp3?filename=retro-vhs-noise-loop-ambient-6201.mp3');
+audioVhs.loop = true;
+audioVhs.volume = 0.07;
+audioVhs.play().catch(() => {
+  // Autoplay pode ser bloqueado, será ativado no click
+  document.body.addEventListener('click', () => audioVhs.play());
+});
 </script>
 </body>
 </html>
