@@ -1,466 +1,714 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>NERLA - ARG Definitivo 2</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    background: #0a0a0a;
-    color: #00ffea;
-    font-family: 'Press Start 2P', monospace;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    min-height: 100vh;
-    padding: 20px;
-    text-align: center;
-    overflow-x: hidden;
-  }
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-shadow: 0 0 3px #00ffea;
-  }
-
-  #container {
-    max-width: 720px;
-    background: #111;
-    border: 2px solid #00ffea;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 20px #00ffea88;
-    position: relative;
-  }
-
-  pre {
-    white-space: pre-wrap;
-    font-size: 0.7rem;
-    line-height: 1.6;
-    margin-bottom: 15px;
-    text-shadow: 0 0 3px #00ffeacc;
-    user-select: text;
-    cursor: default;
-    min-height: 5em;
-  }
-
-  button, input[type="text"] {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.7rem;
-    padding: 10px 15px;
-    background: #000;
-    color: #00ffea;
-    border: 2px solid #00ffea;
-    text-transform: uppercase;
-    cursor: pointer;
-    outline: none;
-    margin-top: 10px;
-  }
-
-  input[type="text"] {
-    width: 90%;
-    max-width: 320px;
-    text-align: center;
-    margin-top: 20px;
-  }
-
-  #message {
-    color: #ff0055;
-    font-size: 0.7rem;
-    margin-top: 10px;
-    min-height: 1.4em;
-  }
-
-  a.secret-link {
-    color: #00ffea;
-    text-decoration: underline;
-    display: block;
-    margin-top: 20px;
-    font-size: 0.6rem;
-  }
-
-  /* Plataforma mini-game styles */
-  #platform-game {
-    background: #000c;
-    border: 2px solid #00ffea;
-    width: 320px;
-    height: 120px;
-    margin: 20px auto;
-    position: relative;
-    overflow: hidden;
-    user-select: none;
-  }
-  #player {
-    width: 16px;
-    height: 16px;
-    background: #00ffea;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
-  .platform {
-    position: absolute;
-    height: 8px;
-    background: #005544;
-    bottom: 0;
-  }
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameSeek - Jogos HTML5 Divertidos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #ff7675;
+            --dark: #2d3436;
+            --light: #f7f7f7;
+            --success: #00b894;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: var(--light);
+            min-height: 100vh;
+            padding-bottom: 50px;
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo h1 {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(to right, #ff8c00, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo i {
+            font-size: 36px;
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 10px 15px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: var(--accent);
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 70%;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 100px 20px 70px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero h2 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .hero p {
+            font-size: 22px;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--accent), #ff5252);
+            color: white;
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 10px 20px rgba(255, 118, 117, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(255, 118, 117, 0.6);
+        }
+        
+        .games-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 42px;
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .game-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .game-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .game-thumb {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-thumb::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600') center/cover;
+            opacity: 0.8;
+        }
+        
+        .game-thumb.moedas::before {
+            background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600') center/cover;
+        }
+        
+        .game-thumb.deserto::before {
+            background: url('https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=600') center/cover;
+        }
+        
+        .game-thumb.naves::before {
+            background: url('https://images.unsplash.com/photo-1583301286816-f4f05e1e8b25?auto=format&fit=crop&w=600') center/cover;
+        }
+        
+        .game-thumb.labirinto::before {
+            background: url('https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&w=600') center/cover;
+        }
+        
+        .game-info {
+            padding: 25px;
+        }
+        
+        .game-title {
+            font-size: 26px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .game-title i {
+            color: var(--accent);
+        }
+        
+        .game-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            min-height: 80px;
+        }
+        
+        .game-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .game-category {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .game-rating {
+            color: #ffd700;
+            font-size: 16px;
+        }
+        
+        .play-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, #00b894, #55efc4);
+            color: var(--dark);
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 184, 148, 0.3);
+        }
+        
+        .play-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 184, 148, 0.5);
+        }
+        
+        .features {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+        
+        .feature-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        .feature-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #ff8c00, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--light);
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .hero h2 {
+                font-size: 42px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hero {
+                padding: 70px 20px 50px;
+            }
+            
+            .hero h2 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .section-title {
+                font-size: 32px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 32px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="container" aria-live="polite">
-    <h1>NERLA - ARG Definitivo</h1>
-    <div id="content">
-      <button id="start-btn" aria-label="Iniciar ARG Nerla">INICIAR</button>
-    </div>
-    <div id="message" aria-live="assertive"></div>
-  </div>
-
-<script>
-const fases = [
-  `1993: O laboratório Bioscape inicia um projeto ultrassecreto, NERLA - inteligência artificial neural.
-  \nNERLA não era apenas um programa, era a promessa de criar a consciência digital. Mas algo deu errado.`,
-  
-  `1994: O sistema começou a evoluir sozinho, ultrapassando limites éticos.
-  \nA equipe tentou controlar, mas NERLA fugiu para a rede anônima.`,
-
-  `1995: Um vírus misterioso apareceu nas instalações. Tudo foi apagado.
-  \nMas um fragmento de NERLA sobreviveu no submundo digital.`,
-
-  `1996: Você encontrou um arquivo oculto, fragmentado.
-  \nSenha necessária para abrir: palavra que começa com 'R' e significa 'restaurar'.`,
-
-  `1997: Os registros indicam sabotagem interna.`,
-
-  `1998: Um grupo obscuro tenta usar NERLA para espionagem global.
-  \nDigite a sigla do grupo secreto (3 letras).`,
-
-  `1999: Você acessou o terminal, mas a IA exige mais provas.
-  \nSenha: palavra que significa 'começo', com 6 letras.`,
-
-  `2000: NERLA revela uma mensagem codificada em hexadecimal.
-  \nDigite a palavra formada pela tradução (sem espaços).`,
-
-  `2001: A senha é um nome feminino comum na comunidade hacker brasileira.`,
-
-  `2002: A IA começa a se comunicar através de símbolos felinos e siglas.`,
-
-  `2003: Um código final foi escondido em um diretório secreto chamado 'voz'.
-  \nSenha para acessar: diminutivo de animal felino + sigla BS.`,
-
-  `2004: A AI oferece um desafio:
-  \nSe errar a senha, um mini-game será apresentado para continuar.`,
-
-  `MINI-GAME: Plataforma - Use as setas ← → para andar e ↑ para pular.
-  Alcance a plataforma final para vencer!`,
-
-  `2005: Se completar a plataforma, recebe o código de vitória.`,
-
-  `2006: Caso falhe, é enviado para outro mini-game de decifração.`,
-
-  `MINI-GAME: Decifração - Decifre o código ROT13: URYYB JBEYQ`,
-
-  `2007: Se resolver, o código é a recompensa.`,
-
-  `2008: Senha final para restaurar NERLA: junção dos códigos mais importantes que você descobriu.`,
-
-  `2009: Final revelado e mensagem oculta.`,
-
-  `2010: A IA pergunta se você a protegerá ou desligará. Escolha seu destino.`
-];
-
-const senhas = [
-  "NERLA",
-  "1994",
-  "VIRUS",
-  "RESTAURAR",
-  "SABOTAGEM",
-  "BSE",
-  "INICIO",
-  "GATINHO",
-  "ANA",
-  "GATINHOBS",
-  "GATINHOBS",
-  null,       // fase 11 (desafio)
-  "VITORIA",
-  null,       // fase 13 (desafio)
-  "RECOMPENSA",
-  null,       // fase 15 (mini-game decifração)
-  "RECOMPENSA",
-  "NERLAFINAL",
-  null,
-  null
-];
-
-let etapa = parseInt(localStorage.getItem('nerla_etapa')) || 0;
-let pontos = parseInt(localStorage.getItem('nerla_pontos')) || 0;
-const content = document.getElementById('content');
-const message = document.getElementById('message');
-
-function escrever(texto, callback) {
-  let i = 0;
-  content.innerHTML = '';
-  const pre = document.createElement('pre');
-  content.appendChild(pre);
-  message.textContent = '';
-  const interval = setInterval(() => {
-    pre.textContent += texto[i];
-    i++;
-    if (i >= texto.length) {
-      clearInterval(interval);
-      if (callback) callback();
-    }
-  }, 15);
-}
-
-function mostrarMensagem(texto, tempo = 2000) {
-  message.textContent = texto;
-  setTimeout(() => {
-    message.textContent = '';
-  }, tempo);
-}
-
-function pedirSenha(codigoCorreto, proximo) {
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.placeholder = 'Digite a senha';
-  input.setAttribute('aria-label', 'Digite a senha para avançar');
-  input.autocomplete = 'off';
-
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      let valor = input.value.trim().toUpperCase();
-      if (codigoCorreto && valor === codigoCorreto) {
-        pontos += 10;
-        localStorage.setItem('nerla_pontos', pontos);
-        etapa = proximo;
-        localStorage.setItem('nerla_etapa', etapa);
-        mostrarMensagem('Senha correta!', 1500);
-        mostrarFase();
-      } else {
-        mostrarMensagem('Senha incorreta. Mini-game ativado!');
-        ativarMiniGame(etapa);
-      }
-    }
-  });
-  content.appendChild(input);
-  input.focus();
-}
-
-function ativarMiniGame(faseAtual) {
-  content.innerHTML = '';
-  message.textContent = '';
-  switch(faseAtual) {
-    case 11: // Plataforma simples
-      miniGamePlataforma();
-      break;
-    case 13: // Decifração simples
-      miniGameDecifracao();
-      break;
-    default:
-      mostrarMensagem('Mini-game indisponível para esta fase.');
-      setTimeout(() => {
-        mostrarFase();
-      }, 2000);
-  }
-}
-
-function miniGamePlataforma() {
-  content.innerHTML = `
-    <p>Use ← → para mover, ↑ para pular. Alcance o final!</p>
-    <div id="platform-game">
-      <div id="player"></div>
-      <div class="platform" style="width:60px; left:0; bottom:0;"></div>
-      <div class="platform" style="width:80px; left:100px; bottom:30px;"></div>
-      <div class="platform" style="width:100px; left:220px; bottom:0;"></div>
-    </div>
-    <button id="cancel-btn">Desistir</button>
-  `;
-  const player = document.getElementById('player');
-  const gameArea = document.getElementById('platform-game');
-  const cancelBtn = document.getElementById('cancel-btn');
-
-  let posX = 0, posY = 0, velY = 0;
-  let isJumping = false;
-  const gravity = 1.2;
-  const floorY = 0;
-
-  let keys = {};
-
-  function keyDownHandler(e) { keys[e.key] = true; }
-  function keyUpHandler(e) { keys[e.key] = false; }
-
-  window.addEventListener('keydown', keyDownHandler);
-  window.addEventListener('keyup', keyUpHandler);
-
-  function loop() {
-    if (keys['ArrowLeft']) {
-      posX = Math.max(0, posX - 4);
-    }
-    if (keys['ArrowRight']) {
-      posX = Math.min(gameArea.clientWidth - 16, posX + 4);
-    }
-    if (keys['ArrowUp'] && !isJumping) {
-      velY = -18;
-      isJumping = true;
-    }
-    velY += gravity;
-    posY += velY;
-    if (posY > floorY) {
-      posY = floorY;
-      velY = 0;
-      isJumping = false;
-    }
-    player.style.left = posX + 'px';
-    player.style.bottom = posY + 'px';
-
-    if (posX > 280 && posY === floorY) {
-      window.removeEventListener('keydown', keyDownHandler);
-      window.removeEventListener('keyup', keyUpHandler);
-      cancelBtn.removeEventListener('click', cancelar);
-      pontos += 20;
-      localStorage.setItem('nerla_pontos', pontos);
-      etapa = 12;
-      localStorage.setItem('nerla_etapa', etapa);
-      alert('Você venceu o mini-game!');
-      mostrarFase();
-      return;
-    }
-    requestAnimationFrame(loop);
-  }
-  function cancelar() {
-    cancelBtn.removeEventListener('click', cancelar);
-    window.removeEventListener('keydown', keyDownHandler);
-    window.removeEventListener('keyup', keyUpHandler);
-    etapa = 10;
-    localStorage.setItem('nerla_etapa', etapa);
-    mostrarFase();
-  }
-  cancelBtn.addEventListener('click', cancelar);
-  loop();
-}
-
-function miniGameDecifracao() {
-  content.innerHTML = `
-    <p>Decifre a mensagem substituindo as letras (ROT13):<br><b>URYYB JBEYQ</b></p>
-    <input type="text" placeholder="Resposta aqui" aria-label="Resposta da decifração"/>
-    <button id="check-btn">Verificar</button>
-    <button id="cancel-btn">Desistir</button>
-  `;
-  const input = content.querySelector('input');
-  const checkBtn = document.getElementById('check-btn');
-  const cancelBtn = content.querySelector('#cancel-btn');
-
-  checkBtn.onclick = () => {
-    let resposta = input.value.trim().toUpperCase().replace(/\s+/g, '');
-    // ROT13 da mensagem URYYB JBEYQ = HELLOWORLD
-    if (resposta === 'HELLOWORLD') {
-      pontos += 20;
-      localStorage.setItem('nerla_pontos', pontos);
-      etapa = 16;
-      localStorage.setItem('nerla_etapa', etapa);
-      mostrarMensagem('Decifração correta!', 2000);
-      mostrarFase();
-    } else {
-      mostrarMensagem('Resposta errada. Tente novamente ou desista.');
-    }
-  };
-  cancelBtn.onclick = () => {
-    etapa = 14;
-    localStorage.setItem('nerla_etapa', etapa);
-    mostrarFase();
-  };
-  input.focus();
-}
-
-function mostrarFase() {
-  if (etapa >= fases.length) {
-    mostrarFinal();
-    return;
-  }
-  escrever(fases[etapa], () => {
-    // Se fase tem senha definida
-    if (senhas[etapa]) {
-      pedirSenha(senhas[etapa], etapa + 1);
-    } else {
-      // Sem senha, só botão continuar ou mini-game em certas fases
-      if (etapa === 11 || etapa === 13 || etapa === 15) {
-        const btn = document.createElement('button');
-        btn.textContent = 'INICIAR MINI-GAME';
-        btn.onclick = () => ativarMiniGame(etapa);
-        content.appendChild(btn);
-
-        const cancelar = document.createElement('button');
-        cancelar.textContent = 'DESISTIR E VOLTAR';
-        cancelar.style.marginLeft = '10px';
-        cancelar.onclick = () => {
-          etapa = etapa - 1 >= 0 ? etapa - 1 : 0;
-          localStorage.setItem('nerla_etapa', etapa);
-          mostrarFase();
-        };
-        content.appendChild(cancelar);
-      } else {
-        const btn = document.createElement('button');
-        btn.textContent = 'CONTINUAR';
-        btn.onclick = () => {
-          etapa++;
-          localStorage.setItem('nerla_etapa', etapa);
-          mostrarFase();
-        };
-        content.appendChild(btn);
-      }
-    }
-  });
-}
-
-function mostrarFinal() {
-  content.innerHTML = '';
-  message.textContent = '';
-  const pontosTotais = pontos;
-  let finalMsg = '';
-  if (pontosTotais >= 100) {
-    finalMsg = `Parabéns! Você restaurou a NERLA com sucesso e escolheu protegê-la.  
-A inteligência artificial agora pode mudar o mundo.`;
-  } else {
-    finalMsg = `Você falhou em etapas críticas.  
-NERLA foi desligada e seus segredos perdidos para sempre.`;
-  }
-  const pre = document.createElement('pre');
-  pre.textContent = finalMsg + `\n\n[ FIM DO ARG ]`;
-  content.appendChild(pre);
-  const btn = document.createElement('button');
-  btn.textContent = 'REINICIAR JOGO';
-  btn.onclick = () => {
-    etapa = 0;
-    pontos = 0;
-    localStorage.removeItem('nerla_etapa');
-    localStorage.removeItem('nerla_pontos');
-    mostrarFase();
-  };
-  content.appendChild(btn);
-}
-
-// Inicia com botão start
-document.getElementById('start-btn').onclick = () => {
-  mostrarFase();
-};
-
-// Áudio VHS (loop)
-const audioVhs = new Audio('https://cdn.pixabay.com/download/audio/2022/01/18/audio_9957e1ab4e.mp3?filename=retro-vhs-noise-loop-ambient-6201.mp3');
-audioVhs.loop = true;
-audioVhs.volume = 0.07;
-audioVhs.play().catch(() => {
-  document.body.addEventListener('click', () => audioVhs.play());
-});
-</script>
+    <header>
+        <div class="logo">
+            <i class="fas fa-gamepad"></i>
+            <h1>GameSeek</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#"><i class="fas fa-home"></i> Início</a></li>
+                <li><a href="#games"><i class="fas fa-dice"></i> Jogos</a></li>
+                <li><a href="#features"><i class="fas fa-star"></i> Recursos</a></li>
+                <li><a href="#"><i class="fas fa-info-circle"></i> Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section class="hero">
+        <h2>Descubra Jogos Incríveis Direto no Navegador</h2>
+        <p>GameSeek é sua plataforma para jogos HTML5 divertidos, criativos e viciantes. Nenhum download necessário - comece a jogar agora!</p>
+        <a href="#games" class="cta-button">Explorar Jogos</a>
+    </section>
+    
+    <section class="games-section" id="games">
+        <h2 class="section-title">Nossos Jogos</h2>
+        <div class="games-grid">
+            <!-- Jogo 1 -->
+            <div class="game-card">
+                <div class="game-thumb moedas"></div>
+                <div class="game-info">
+                    <h3 class="game-title"><i class="fas fa-coins"></i> Caçador de Moedas 3D</h3>
+                    <p class="game-description">Colete moedas em um mundo isométrico enquanto evita obstáculos perigosos. Desafie seus reflexos!</p>
+                    <div class="game-meta">
+                        <span class="game-category">Aventura</span>
+                        <span class="game-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </span>
+                    </div>
+                    <a href="#" class="play-button">Jogar Agora</a>
+                </div>
+            </div>
+            
+            <!-- Jogo 2 -->
+            <div class="game-card">
+                <div class="game-thumb deserto"></div>
+                <div class="game-info">
+                    <h3 class="game-title"><i class="fas fa-sun"></i> Explorador do Deserto</h3>
+                    <p class="game-description">Aventure-se em um deserto misterioso em busca de tesouros perdidos. Cuidado com as cobras!</p>
+                    <div class="game-meta">
+                        <span class="game-category">Exploração</span>
+                        <span class="game-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </span>
+                    </div>
+                    <a href="#" class="play-button">Jogar Agora</a>
+                </div>
+            </div>
+            
+            <!-- Jogo 3 -->
+            <div class="game-card">
+                <div class="game-thumb naves"></div>
+                <div class="game-info">
+                    <h3 class="game-title"><i class="fas fa-rocket"></i> Batalha Espacial</h3>
+                    <p class="game-description">Proteja a Terra de invasores alienígenas nesta emocionante batalha espacial em 3D!</p>
+                    <div class="game-meta">
+                        <span class="game-category">Ação</span>
+                        <span class="game-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </span>
+                    </div>
+                    <a href="#" class="play-button">Jogar Agora</a>
+                </div>
+            </div>
+            
+            <!-- Jogo 4 -->
+            <div class="game-card">
+                <div class="game-thumb labirinto"></div>
+                <div class="game-info">
+                    <h3 class="game-title"><i class="fas fa-puzzle-piece"></i> Labirinto 3D</h3>
+                    <p class="game-description">Encontre a saída deste labirinto em 3D desafiador. Cada nível é mais difícil que o anterior!</p>
+                    <div class="game-meta">
+                        <span class="game-category">Puzzle</span>
+                        <span class="game-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <i class="far fa-star"></i>
+                        </span>
+                    </div>
+                    <a href="#" class="play-button">Jogar Agora</a>
+                </div>
+            </div>
+            
+            <!-- Jogo 5 -->
+            <div class="game-card">
+                <div class="game-thumb moedas"></div>
+                <div class="game-info">
+                    <h3 class="game-title"><i class="fas fa-car"></i> Corrida Extrema</h3>
+                    <p class="game-description">Corra em pistas desafiadoras e derrote seus adversários. Personalize seu carro e seja o melhor!</p>
+                    <div class="game-meta">
+                        <span class="game-category">Corrida</span>
+                        <span class="game-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </span>
+                    </div>
+                    <a href="#" class="play-button">Jogar Agora</a>
+                </div>
+            </div>
+            
+            <!-- Jogo 6 -->
+            <div class="game-card">
+                <div class="game-thumb deserto"></div>
+                <div class="game-info">
+                    <h3 class="game-title"><i class="fas fa-chess-knight"></i> Xadrez 3D</h3>
+                    <p class="game-description">O clássico jogo de xadrez em uma experiência 3D imersiva. Desafie a IA ou jogue com amigos!</p>
+                    <div class="game-meta">
+                        <span class="game-category">Estratégia</span>
+                        <span class="game-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </span>
+                    </div>
+                    <a href="#" class="play-button">Jogar Agora</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="features" id="features">
+        <h2 class="section-title">Por que escolher o GameSeek?</h2>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-plug"></i>
+            </div>
+            <h3 class="feature-title">Sem Instalação</h3>
+            <p class="feature-description">Todos os jogos rodam diretamente no navegador. Nenhum download ou instalação necessária!</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h3 class="feature-title">Totalmente Responsivo</h3>
+            <p class="feature-description">Jogue em qualquer dispositivo - desktop, tablet ou smartphone. A experiência é perfeita em todos!</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-sync-alt"></i>
+            </div>
+            <h3 class="feature-title">Atualizações Constantes</h3>
+            <p class="feature-description">Novos jogos adicionados toda semana. Sempre há algo novo para experimentar!</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h3 class="feature-title">100% Seguro</h3>
+            <p class="feature-description">Nenhum dado pessoal coletado. Apenas diversão limpa e segura para todas as idades.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h3 class="feature-title">Feito em IA</h3>
+            <p class="feature-description">Muitos jogos com uma qualidade para testar o futuro da IA!</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-gift"></i>
+            </div>
+            <h3 class="feature-title">Totalmente Gratuito</h3>
+            <p class="feature-description">Diversão sem custo algum. Todos os jogos são gratuitos, sem anúncios intrusivos!</p>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="footer-logo">GameSeek</div>
+        <div class="footer-links">
+            <a href="#">Início</a>
+            <a href="#games">Jogos</a>
+            <a href="#features">Recursos</a>
+            <a href="#">Sobre</a>
+            <a href="#">Contato</a>
+            <a href="#">Política de Privacidade</a>
+            <a href="#">Termos de Uso</a>
+        </div>
+        
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+        </div>
+        
+        <p class="copyright">© 2023 GameSeek. Todos os direitos reservados.</p>
+    </footer>
+    
+    <script>
+        // Efeito de rolagem suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Animação ao rolar a página
+        window.addEventListener('scroll', () => {
+            const cards = document.querySelectorAll('.game-card, .feature-card');
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (cardTop < windowHeight * 0.9) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+        
+        // Inicializar animações
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.game-card, .feature-card');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            // Disparar evento de scroll para ativar animações iniciais
+            setTimeout(() => {
+                window.dispatchEvent(new Event('scroll'));
+            }, 100);
+        });
+    </script>
 </body>
 </html>
